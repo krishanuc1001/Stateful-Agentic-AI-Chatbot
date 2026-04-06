@@ -91,15 +91,15 @@ The architecture leverages:
 
 ## Tech Stack
 
-| Component           | Technology                                                       |
-| ------------------- | ---------------------------------------------------------------- |
-| **LLM**             | Llama 3 (via Groq)                                               |
-| **Orchestration**   | LangGraph                                                        |
-| **Vector Database** | FAISS                                                            |
-| **Web Framework**   | Streamlit                                                        |
-| **Language**        | Python 3.9+                                                      |
-| **API Clients**     | LangChain, LangChain Community, LangChain Groq, LangChain OpenAI |
-| **Utilities**       | Tavily Python                                                    |
+| Component          | Technology                                           |
+| ------------------ | ---------------------------------------------------- |
+| **LLM**            | Llama 3 (via Groq - High-speed inference)            |
+| **Orchestration**  | LangGraph (Cyclical workflows with persistent state) |
+| **Web Framework**  | Streamlit (Interactive UI)                           |
+| **Language**       | Python 3.9+                                          |
+| **Core Libraries** | LangChain, LangChain Community, LangChain Groq       |
+| **API Clients**    | Groq API, OpenAI API (optional)                      |
+| **Utilities**      | Tavily Python (for information retrieval)            |
 
 ## Installation
 
@@ -147,19 +147,53 @@ The architecture leverages:
 
 ## Usage
 
-### Starting the Application
+### Running the Streamlit UI Locally
 
-```bash
-streamlit run app.py
-```
+1. **Ensure you're in the project directory**
 
-The application will open at `http://localhost:8501`
+   ```bash
+   cd Stateful_Agentic_AI
+   ```
+
+2. **Activate the virtual environment** (if not already activated)
+
+   ```bash
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Start the Streamlit application**
+
+   ```bash
+   streamlit run app.py
+   ```
+
+4. **Access the UI**
+   - The application will automatically open in your default browser at `http://localhost:8501`
+   - If it doesn't open automatically, manually navigate to `http://localhost:8501`
+
+### First-Time Setup in the UI
+
+1. **Select LLM Provider** (Sidebar)
+   - Choose "Groq" to use Llama 3 models
+
+2. **Enter Groq API Key** (Sidebar)
+   - Get your API key from https://groq.com/
+   - Paste it in the "API Key" field
+
+3. **Select Model** (Sidebar)
+   - Choose your preferred Llama model (e.g., llama3-8b-8192)
+
+4. **Select Use Case** (Sidebar)
+   - Pick the use case relevant to your needs
+
+5. **Start Interacting**
+   - Begin your conversation with the AI assistant in the main chat area
 
 ### Interacting with the System
 
-1. **Chatbot Mode** - Start conversing with the AI assistant
-2. **Agent Mode** - Request the agent to perform specific tasks
-3. **News Mode** - Get aggregated AI and tech news summaries
+- **Conversational Chatbot** - Have natural language conversations with context awareness
+- **Agentic Capabilities** - Request the agent to perform specific tasks using integrated tools
+- **State Persistence** - Your conversation history is maintained across interactions
 
 ## Project Structure
 
@@ -168,22 +202,32 @@ Stateful_Agentic_AI/
 ├── README.md                 # Project documentation
 ├── requirements.txt          # Dependencies
 ├── .gitignore               # Git ignore rules
-├── app.py                   # Main Streamlit application
+├── app.py                   # Entry point for Streamlit application
 ├── .env                     # Environment variables (not in git)
 │
 ├── src/
 │   ├── __init__.py
-│   ├── chatbot.py           # Conversational component
-│   ├── agent.py             # Tool-augmented agent
-│   ├── news_aggregator.py   # News retrieval & summarization
-│   ├── state_manager.py     # LangGraph state management
-│   └── utils.py             # Helper functions
-│
-└── tests/
-    ├── __init__.py
-    ├── test_chatbot.py
-    ├── test_agent.py
-    └── test_news_aggregator.py
+│   └── langgraphAgenticAI/
+│       ├── __init__.py
+│       ├── main.py                    # Main application logic
+│       ├── graph/                     # LangGraph workflow definitions
+│       │   └── __init__.py
+│       ├── llm/                       # LLM configurations
+│       │   └── __init__.py
+│       ├── nodes/                     # Graph node implementations
+│       │   └── __init__.py
+│       ├── state/                     # State management
+│       │   └── __init__.py
+│       ├── tools/                     # Tool integrations
+│       │   └── __init__.py
+│       └── ui/                        # User interface layer
+│           ├── __init__.py
+│           ├── ui_config_reader.py    # Configuration reader
+│           ├── ui_config.ini          # UI configuration file
+│           └── streamlit_ui/
+│               ├── __init__.py
+│               ├── load_ui.py         # Streamlit UI loader
+│               └── display_ui.py      # UI display components
 ```
 
 ## Contributing
@@ -202,7 +246,33 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Status**: 🚧 In Development
+## Troubleshooting
 
-**Author**: [Your Name]  
+### Port Already in Use
+
+If port 8501 is already in use, you can specify a different port:
+
+```bash
+streamlit run app.py --server.port 8502
+```
+
+### API Key Issues
+
+- Ensure your Groq API key is valid and not expired
+- API key should be entered in the Streamlit sidebar before starting
+- Check that you have sufficient credit/quota on your Groq account
+
+### Environment Variables
+
+If you want to use environment variables instead of entering the API key in the UI:
+
+```bash
+export GROQ_API_KEY=your_groq_api_key
+streamlit run app.py
+```
+
+---
+
+**Status**: 🚀 Active Development
+
 **Last Updated**: April 2026
