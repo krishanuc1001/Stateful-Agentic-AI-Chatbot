@@ -21,6 +21,7 @@ class LoadStreamlitUI:
             self.user_controls["selected_llm"] = st.selectbox("Select LLM", llm_options)
 
             if self.user_controls["selected_llm"] == "Groq":
+
                 #Model Selection for Groq
                 model_options = self.config.get_groq_model_options()
                 self.user_controls["selected_groq_model"] = st.selectbox("Select Model", model_options)
@@ -30,7 +31,17 @@ class LoadStreamlitUI:
                 if not self.user_controls["GROQ_API_KEY"]:
                     st.info("Please enter your GROQ API Key to proceed. Get it from https://groq.com/")
 
-            
+            elif self.user_controls["selected_llm"] == "Gemini":
+
+                #Model Selection for Gemini
+                model_options = self.config.get_gemini_model_options()
+                self.user_controls["selected_gemini_model"] = st.selectbox("Select Model", model_options)
+                self.user_controls["GEMINI_API_KEY"] = st.session_state["GEMINI_API_KEY"] = st.text_input("API Key", type="password")
+
+                #Show info if API Key is empty
+                if not self.user_controls["GEMINI_API_KEY"]:
+                    st.info("Please enter your GEMINI API Key to proceed. Get it from https://ai.google.com/")
+
             # Use Case selection
             self.user_controls["selected_usecase"] = st.selectbox("Select Use Case", usecase_options)
 
