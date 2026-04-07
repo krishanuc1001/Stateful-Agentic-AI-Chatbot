@@ -26,10 +26,9 @@ class LoadStreamlitUI:
                 self.user_controls["selected_groq_model"] = st.selectbox("Select Model", model_options)
                 self.user_controls["GROQ_API_KEY"] = st.session_state["GROQ_API_KEY"] = st.text_input("API Key", type="password")
 
-                #Validate API Key
+                #Show info if API Key is empty
                 if not self.user_controls["GROQ_API_KEY"]:
-                    st.warning("Please enter your GROQ API Key to proceed. Don't have one? Get it from https://groq.com/ and enter it here.")
-                    return
+                    st.info("Please enter your GROQ API Key to proceed. Get it from https://groq.com/")
 
             
             # Use Case selection
