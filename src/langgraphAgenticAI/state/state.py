@@ -7,6 +7,6 @@ class State(TypedDict):
     Represents the state of the agentic AI chatbot used in Graph
     """
 
-    message: Annotated[list, add_messages]
+    messages: Annotated[list, add_messages]
 
 
