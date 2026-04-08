@@ -1,6 +1,6 @@
-import Streamlit as st
+import streamlit as st
 import json
-from langchain_core_messages import HumanMessage, AIMessage, ToolMessage
+from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 
 class DisplayResultStreamlit:
     def __init__(self, usecase, graph, user_message):
