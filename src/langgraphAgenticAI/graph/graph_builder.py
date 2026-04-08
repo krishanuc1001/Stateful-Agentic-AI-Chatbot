@@ -20,3 +20,14 @@ class GraphBuilder:
         self.graph_builder.add_node("chatbot", self.basic_chatbot_node.process)
         self.graph_builder.add_edge(START, "chatbot")
         self.graph_builder.add_edge("chatbot", END)
+
+    def setup_graph(self, usecase: str):
+        """
+        Sets up the graph based on the selected use case. Currently, it supports a 'Basic Chatbot' use case, which constructs a simple conversational graph.
+        The method checks the provided use case and calls the corresponding graph construction method. If an unsupported use case is provided, it raises a ValueError.
+        """
+
+        if usecase == "Basic Chatbot":
+            self.basic_chatbot_graph()
+        else:
+            raise ValueError(f"Unsupported use case: {usecase}")
