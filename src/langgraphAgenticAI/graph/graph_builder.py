@@ -29,5 +29,4 @@ class GraphBuilder:
 
         if usecase == "Basic Chatbot":
             self.basic_chatbot_graph()
-        else:
-            raise ValueError(f"Unsupported use case: {usecase}")
+        return self.graph_builder.compile()
