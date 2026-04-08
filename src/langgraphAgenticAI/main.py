@@ -1,6 +1,7 @@
 import streamlit as st
 from src.langgraphAgenticAI.graph.graph_builder import GraphBuilder
 from src.langgraphAgenticAI.llm.groq_llm import GroqLLM
+from src.langgraphAgenticAI.llm.gemini_llm import GeminiLLM
 from src.langgraphAgenticAI.ui.streamlit_ui.load_ui import LoadStreamlitUI
 from src.langgraphAgenticAI.ui.streamlit_ui.display_result import DisplayResultStreamlit
 
@@ -20,27 +21,42 @@ def load_langgraph_agentic_app():
     if user_message:
         
         try:
-            # Configure LLM
-            object_llm_config = GroqLLM(user_controls_input=user_input)
+            # Check selected LLM provider
+            selected_llm = user_input.get("selected_llm")
+            
+            if not selected_llm:
+                st.error("Error: Please select an LLM provider to proceed.")
+                return
+            
+            # Configure LLM based on selection
+            if selected_llm == "Groq":
+                object_llm_config = GroqLLM(user_controls_input=user_input)
+            elif selected_llm == "Gemini":
+                object_llm_config = GeminiLLM(user_controls_input=user_input)
+            else:
+                st.error(f"Error: Unsupported LLM provider: {selected_llm}")
+                return
+            
             model = object_llm_config.get_llm_model()
 
             if not model:
                 st.error("Error: LLM configuration failed. Please check your selections and API keys.")
                 return
             
-            # Initialize the LLM with the configured model and API key
+            # Get the use case
             usecase = user_input.get("selected_usecase")
 
             if not usecase:
                 st.error("Error: Please select a use case to proceed.")
                 return
             
-            # Graph building and agentic logic would go here, using the 'model' and 'usecase' variables as needed
-            graph_builder = GraphBuilder(model=model, usecase=usecase)
+            # Graph building and agentic logic would go here
+            graph_builder = GraphBuilder(model=model)
 
             try:
-                response = graph_builder.setup_graph(usecase)
-                DisplayResultStreamlit(usecase=usecase, graph=response, user_message=user_message).display_result_on_ui()
+                graph_builder.setup_graph(usecase)
+                graph = graph_builder.graph_builder.compile()
+                DisplayResultStreamlit(usecase=usecase, graph=graph, user_message=user_message).display_result_on_ui()
             except Exception as e:
                 st.error(f"Error: Graph set up failed: {e}")
                 return
