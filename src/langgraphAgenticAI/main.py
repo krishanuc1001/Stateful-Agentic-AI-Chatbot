@@ -2,6 +2,7 @@ import streamlit as st
 from src.langgraphAgenticAI.graph.graph_builder import GraphBuilder
 from src.langgraphAgenticAI.llm.groq_llm import GroqLLM
 from src.langgraphAgenticAI.ui.streamlit_ui.load_ui import LoadStreamlitUI
+from src.langgraphAgenticAI.ui.streamlit_ui.display_result import DisplayResultStreamlit
 
 def load_langgraph_agentic_app():
     """
@@ -39,11 +40,11 @@ def load_langgraph_agentic_app():
 
             try:
                 response = graph_builder.setup_graph(usecase)
+                DisplayResultStreamlit(usecase=usecase, graph=response, user_message=user_message).display_result_on_ui()
             except Exception as e:
                 st.error(f"Error: Graph set up failed: {e}")
                 return
 
         except Exception as e:
-
-            st.error(f"Error configuring LLM: {e}")
-            return None
+            st.error(f"Error: Configuring LLM failed: {e}")
+            return
