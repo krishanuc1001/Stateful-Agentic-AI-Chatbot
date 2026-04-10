@@ -1,6 +1,8 @@
 from langgraph.graph import StateGraph, START, END
 from src.langgraphAgenticAI.state.state import State
 from src.langgraphAgenticAI.nodes.basic_chatbot_node import BasicChatbotNode
+from src.langgraphAgenticAI.tools.search_tool import get_tools, create_tool_nodes
+from langgraph.prebuilt import tools_condition, ToolNode
 
 class GraphBuilder:
     def __init__(self, model):
@@ -21,6 +23,37 @@ class GraphBuilder:
         self.graph_builder.add_edge(START, "chatbot")
         self.graph_builder.add_edge("chatbot", END)
 
+    def chatbot_with_web_search_graph(self):
+        """
+        Builds a graph for a chatbot use case that includes a web search tool.
+        This method creates a Chatbot graph that includes both the chatbot node and the web search tool node, integrating them into the graph structure.
+        It defines tools, initializes the chatbot node with the necessary tools, and sets up the edges to allow for a dynamic conversational flow where the chatbot can utilize the web search tool as needed.
+        The Chatbot node is set as the Entry point of the graph, and the Web Search Tool node is connected to the chatbot node, allowing for interactions between the two. 
+        The Web Search Tool node is also connected to the Exit point of the graph, enabling a complete flow from user input to final response.
+        The flow allows the chatbot to utilize the web search tool as needed during the conversation, providing a more dynamic and informative user experience.
+        """
+
+        # Define the tool and tool node
+        tools = get_tools()
+        tool_node = create_tool_nodes(tools)
+
+        # Define the LLM
+        llm = self.llm
+
+        #Define the chatbot node with the tool
+
+        
+        # Add nodes and edges to the graph
+        self.graph_builder.add_node("chatbot")
+        self.graph_builder.add_node("tools", tool_node)
+
+        # Define conditional and direct edges
+        self.graph_builder.add_edge(START, "chatbot")
+        self.graph_builder.add_conditional_edges("chatbot", tools_condition)
+        self.graph_builder.add_edge("tools", "chatbot")
+        self.graph_builder.add_edge("chatbot", END)
+
+
     def setup_graph(self, usecase: str):
         """
         Sets up the graph based on the selected use case. Currently, it supports a 'Basic Chatbot' use case, which constructs a simple conversational graph.
@@ -29,4 +62,8 @@ class GraphBuilder:
 
         if usecase == "Basic Chatbot":
             self.basic_chatbot_graph()
+        elif usecase == "Chatbot with Web Search Tool":
+            self.chatbot_with_web_search_graph()
+        else:
+            raise ValueError(f"Unsupported use case: {usecase}")
         return self.graph_builder.compile()
