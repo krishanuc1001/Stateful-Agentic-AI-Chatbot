@@ -22,3 +22,19 @@ class DisplayResultStreamlit:
                         st.write(user_message)
                     with st.chat_message("assistant"):
                         st.write(value['messages'].content)
+
+        elif usecase == "Chatbot with Web Search Tool":
+            initial_state = {'messages': [user_message]}
+            response = graph.invoke(initial_state)
+            for message in response['messages']:
+                if type(message) == HumanMessage:
+                    with st.chat_message("user"):
+                        st.write(message.content)
+                elif type(message) == ToolMessage:
+                    with st.chat_message("tool"):
+                        st.write("Tool Call Started")
+                        st.write(f"Tool Output: {message.content}")
+                        st.write("Tool Call Ended")
+                elif type(message) == AIMessage and message.content != "":
+                    with st.chat_message("assistant"):
+                        st.write(message.content)
