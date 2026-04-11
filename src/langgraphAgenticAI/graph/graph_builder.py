@@ -4,8 +4,10 @@ from src.langgraphAgenticAI.nodes.basic_chatbot_node import BasicChatbotNode
 from src.langgraphAgenticAI.tools.search_tool import get_tools, create_tool_nodes
 from langgraph.prebuilt import tools_condition, ToolNode
 from src.langgraphAgenticAI.nodes.chatbot_with_websearch_node import ChatbotWithWebSearchNode
+import os
 
 class GraphBuilder:
+
     def __init__(self, model):
         self.llm = model
         self.graph_builder = StateGraph(State)
@@ -42,7 +44,8 @@ class GraphBuilder:
         llm = self.llm
 
         #Define the chatbot node with the tool
-        obj_chatbot_with_node = ChatbotWithWebSearchNode(llm)
+        tavily_api_key = os.environ["TAVILY_API_KEY"]
+        obj_chatbot_with_node = ChatbotWithWebSearchNode(llm, tavily_api_key)
         chatbot_node = obj_chatbot_with_node.create_chatbot(tools)
         
         # Add nodes and edges to the graph
