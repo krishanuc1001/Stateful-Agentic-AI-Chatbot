@@ -45,27 +45,25 @@ class LoadStreamlitUI:
             # Use Case selection
             self.user_controls["selected_usecase"] = st.selectbox("Select Use Case", usecase_options)
 
-            if self.user_controls["selected_usecase"] == "Chatbot with Web Search Tool":
+            if self.user_controls["selected_usecase"] == "Chatbot with Web Search Tool" or self.user_controls["selected_usecase"] == "AI News Summarizer":
                 os.environ["TAVILY_API_KEY"] = self.user_controls["TAVILY_API_KEY"] = st.session_state["TAVILY_API_KEY"] = st.text_input("Tavily API Key for Web Search Tool", type="password")
+                
+                # Validate Tavily API Key input
                 if not self.user_controls["TAVILY_API_KEY"]:
-                    st.info("Please enter your Tavily API Key to use the Web Search Tool. Get it from https://app.tavily.com/home")
+                    st.warning("⚠️ Please enter your Tavily API Key to use the Web Search Tool. Get it from https://app.tavily.com/home")
+
+            if self.user_controls['selected_usecase'] == "AI News Summarizer":
+                st.subheader("📰 AI News Summarizer")
+
+                with st.sidebar:
+                    time_frame = st.selectbox(
+                        "🗓️ Select Time Frame",
+                        ["Daily", "Weekly", "Monthly"],
+                        index = 0
+                    )
+
+                if st.button("🔎 Fetch Latest AI News", use_container_width=True):
+                    # st.session_state.IsFetchButtonClicked = True
+                    st.session_state.time_frame = time_frame
 
         return self.user_controls
-        
-        
-        # llm_options = self.config.get_llm_options()
-        # if llm_options:
-        #     st.subheader("Select LLM")
-        #     selected_llm = st.selectbox("Choose a Language Model", llm_options)
-
-        # # Load Use Case options
-        # usecase_options = self.config.get_usecase_options()
-        # if usecase_options:
-        #     st.subheader("Select Use Case")
-        #     selected_usecase = st.selectbox("Choose a Use Case", usecase_options)
-
-        # # Load GROQ Model options
-        # groq_model_options = self.config.get_groq_model_options()
-        # if groq_model_options:
-        #     st.subheader("Select GROQ Model")
-        #     selected_groq_model = st.selectbox("Choose a GROQ Model", groq_model_options)
