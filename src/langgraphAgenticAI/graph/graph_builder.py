@@ -59,6 +59,27 @@ class GraphBuilder:
         self.graph_builder.add_edge("chatbot", END)
 
 
+    def ai_news_summarizer_graph(self):
+        """
+        Builds a graph for an AI news summarizer use case.
+        This method creates a graph that includes nodes for fetching news articles, summarizing them, and providing the summarized output to the user.
+        It defines the necessary tools and integrates them into the graph structure, allowing for a dynamic flow where the AI can fetch and summarize news articles based on user input.
+        The flow starts with the user input, which triggers the news fetching node. The fetched news articles are then passed to the summarization node, which processes the information and provides a concise summary back to the user.
+        This setup allows for an efficient and informative user experience when interacting with the AI news summarizer.
+        """
+
+        # Added Nodes
+        self.graph_builder.add_node("fetch_news", "")
+        self.graph_builder.add_node("summarize_news", "")
+        self.graph_builder.add_edge("save_result", "")
+
+        # Added Edges
+        self.graph_builder.set_entry_point("fetch_news")
+        self.graph_builder.add_edge("fetch_news", "summarize_news")
+        self.graph_builder.add_edge("summarize_news", "save_result")
+        self.graph_builder.set_exit_point("save_result")
+
+    
     def setup_graph(self, usecase: str):
         """
         Sets up the graph based on the selected use case. Currently, it supports a 'Basic Chatbot' use case, which constructs a simple conversational graph.
