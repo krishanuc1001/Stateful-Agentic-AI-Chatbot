@@ -15,8 +15,24 @@ def load_langgraph_agentic_app():
     ui=LoadStreamlitUI()
     user_input = ui.load_streamlit_ui()
 
-    # Display chat input regardless of form completion
-    user_message = st.chat_input("Enter your message here:")
+    if not user_input:
+        st.error("Error: Failed to load user input from the UI. Please check the UI configuration and try again.")
+        return
+    
+    """
+    Text input handling and main application logic would go here. This includes:
+    - Handling user input from the chat interface or other UI components.
+    - Configuring the LLM based on user selections.
+    - Building the appropriate graph based on the selected use case.
+    - Executing the graph and displaying results on the UI.
+    
+    The implementation would include error handling to ensure a smooth user experience, 
+    providing feedback in case of issues with input, configuration, or graph execution.
+    """
+    if st.session_state.IsFetchButtonClicked:
+        user_message = st.session_state.time_frame
+    else:
+        user_message = st.chat_input("Enter your message here:")
 
     if user_message:
         
