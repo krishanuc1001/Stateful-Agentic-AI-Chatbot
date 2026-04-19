@@ -27,7 +27,7 @@ class AINewsSummarizerNode:
             dict: Updated state containing the news_data.
         """
 
-        frequency = state['messages'][0].content.lower()
+        frequency = state['messages'][0].content.lower() if state.get('messages') else "daily"
         self.state['frequency'] = frequency
         time_range_map = {
             "daily": "d",
