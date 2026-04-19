@@ -1,5 +1,5 @@
 from tavily import TavilyClient
-from langgchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 
 class AINewsSummarizerNode:
 
