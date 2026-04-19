@@ -80,7 +80,7 @@ class GraphBuilder:
         self.graph_builder.set_entry_point("fetch_news")
         self.graph_builder.add_edge("fetch_news", "summarize_news")
         self.graph_builder.add_edge("summarize_news", "save_result")
-        self.graph_builder.set_exit_point("save_result")
+        self.graph_builder.add_edge("save_result", END)
 
     
     def setup_graph(self, usecase: str):

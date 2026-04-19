@@ -10,7 +10,10 @@ class LoadStreamlitUI:
 
     def load_streamlit_ui(self):
         st.set_page_config(page_title=self.config.get_page_title(), layout="wide")
-        st.header(self.config.get_page_title())
+        st.header(" 🤖 " + self.config.get_page_title())
+        st.session_state.IsFetchButtonClicked = False
+        st.session_state.time_frame = ""
+
 
         with st.sidebar:
             #Get options from config and display in sidebar
