@@ -4,6 +4,7 @@ from src.langgraphAgenticAI.nodes.basic_chatbot_node import BasicChatbotNode
 from src.langgraphAgenticAI.tools.search_tool import get_tools, create_tool_nodes
 from langgraph.prebuilt import tools_condition, ToolNode
 from src.langgraphAgenticAI.nodes.chatbot_with_websearch_node import ChatbotWithWebSearchNode
+from src.langgraphAgenticAI.nodes.ai_news_summarizer_node import AINewsSummarizerNode
 import os
 
 class GraphBuilder:
@@ -68,10 +69,12 @@ class GraphBuilder:
         This setup allows for an efficient and informative user experience when interacting with the AI news summarizer.
         """
 
+        ai_news_node = AINewsSummarizerNode(self.llm)
+
         # Added Nodes
-        self.graph_builder.add_node("fetch_news", "")
-        self.graph_builder.add_node("summarize_news", "")
-        self.graph_builder.add_edge("save_result", "")
+        self.graph_builder.add_node("fetch_news", ai_news_node.fetch_news)
+        self.graph_builder.add_node("summarize_news", ai_news_node.summarize_news)
+        self.graph_builder.add_edge("save_result", ai_news_node.save_result)
 
         # Added Edges
         self.graph_builder.set_entry_point("fetch_news")
@@ -90,6 +93,9 @@ class GraphBuilder:
             self.basic_chatbot_graph()
         elif usecase == "Chatbot with Web Search Tool":
             self.chatbot_with_web_search_graph()
+        elif usecase == "AI News Summarizer":
+            self.ai_news_summarizer_graph()
         else:
             raise ValueError(f"Unsupported use case: {usecase}")
+        
         return self.graph_builder.compile()
